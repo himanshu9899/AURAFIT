@@ -1,0 +1,19 @@
+[
+  {
+    "_id": "goal_guest_1",
+    "createdAt": "2026-07-26T02:15:54.397Z",
+    "userId": "guest_user_1",
+    "dailyMinutes": 60,
+    "dailyCalories": 500,
+    "dailyDistanceKm": 5,
+    "dailyWorkoutsCount": 1,
+    "weeklyMinutes": 300,
+    "weeklyCalories": 2500,
+    "weeklyDistanceKm": 25,
+    "weeklyWorkoutsCount": 5,
+    "monthlyMinutes": 1200,
+    "monthlyCalories": 10000,
+    "monthlyDistanceKm": 100,
+    "monthlyWorkoutsCount": 20
+  }
+]

@@ -1,0 +1,154 @@
+[
+  {
+    "_id": "seed_1",
+    "createdAt": "2026-07-24T15:26:12.671Z",
+    "userId": "guest_user_1",
+    "title": "Hypertrophy Upper Body Power",
+    "category": "Chest",
+    "date": "2026-07-24",
+    "durationMinutes": 55,
+    "caloriesBurned": 420,
+    "intensity": "High",
+    "notes": "Hit a new PR on Bench Press! Felt great.",
+    "exercises": [
+      {
+        "name": "Incline Barbell Bench Press",
+        "category": "Chest",
+        "sets": [
+          {
+            "setNumber": 1,
+            "reps": 10,
+            "weightKg": 70,
+            "completed": true
+          },
+          {
+            "setNumber": 2,
+            "reps": 8,
+            "weightKg": 80,
+            "completed": true
+          },
+          {
+            "setNumber": 3,
+            "reps": 6,
+            "weightKg": 85,
+            "completed": true
+          }
+        ]
+      },
+      {
+        "name": "Cable Chest Flyes",
+        "category": "Chest",
+        "sets": [
+          {
+            "setNumber": 1,
+            "reps": 12,
+            "weightKg": 20,
+            "completed": true
+          },
+          {
+            "setNumber": 2,
+            "reps": 12,
+            "weightKg": 22.5,
+            "completed": true
+          },
+          {
+            "setNumber": 3,
+            "reps": 10,
+            "weightKg": 25,
+            "completed": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_id": "seed_2",
+    "createdAt": "2026-07-24T15:26:12.671Z",
+    "userId": "guest_user_1",
+    "title": "Legs & Core Burnout",
+    "category": "Legs",
+    "date": "2026-07-23",
+    "durationMinutes": 60,
+    "caloriesBurned": 510,
+    "intensity": "Extreme",
+    "notes": "Quads were completely exhausted.",
+    "exercises": [
+      {
+        "name": "Barbell Back Squats",
+        "category": "Legs",
+        "sets": [
+          {
+            "setNumber": 1,
+            "reps": 10,
+            "weightKg": 90,
+            "completed": true
+          },
+          {
+            "setNumber": 2,
+            "reps": 8,
+            "weightKg": 105,
+            "completed": true
+          },
+          {
+            "setNumber": 3,
+            "reps": 6,
+            "weightKg": 115,
+            "completed": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_id": "id_1784907130826_9sysg",
+    "createdAt": "2026-07-24T15:32:10.826Z",
+    "userId": "guest_user_1",
+    "title": "cycling",
+    "category": "Gym",
+    "date": "2026-07-24",
+    "durationMinutes": 45,
+    "caloriesBurned": 340,
+    "intensity": "High",
+    "exercises": [],
+    "notes": ""
+  },
+  {
+    "_id": "id_1784915213396_a1td9",
+    "createdAt": "2026-07-24T17:46:53.396Z",
+    "userId": "guest_user_1",
+    "title": "cycling",
+    "category": "Gym",
+    "date": "2026-07-25",
+    "durationMinutes": 45,
+    "caloriesBurned": 340,
+    "intensity": "High",
+    "exercises": [],
+    "notes": ""
+  },
+  {
+    "_id": "id_1784999154358_nq0zo",
+    "createdAt": "2026-07-25T17:05:54.358Z",
+    "userId": "guest_user_1",
+    "title": "MORNING WORKOUT",
+    "category": "Cycling",
+    "date": "2026-07-25",
+    "durationMinutes": 45,
+    "caloriesBurned": 481,
+    "intensity": "High",
+    "exercises": [],
+    "notes": ""
+  },
+  {
+    "_id": "id_1784999180309_25vbw",
+    "createdAt": "2026-07-25T17:06:20.309Z",
+    "userId": "guest_user_1",
+    "title": "morning walk",
+    "category": "Walking",
+    "date": "2026-07-26",
+    "durationMinutes": 45,
+    "caloriesBurned": 215,
+    "intensity": "High",
+    "exercises": [],
+    "notes": ""
+  }
+]

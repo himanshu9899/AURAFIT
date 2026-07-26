@@ -1,0 +1,41 @@
+[
+  {
+    "_id": "seed_1",
+    "createdAt": "2026-07-24T15:26:12.674Z",
+    "userId": "guest_user_1",
+    "date": "2026-07-24",
+    "mealType": "Breakfast",
+    "foodName": "Oatmeal with Blueberries & Whey Protein",
+    "servingSize": "1 bowl (80g oats)",
+    "calories": 420,
+    "proteinGrams": 32,
+    "carbsGrams": 55,
+    "fatGrams": 8
+  },
+  {
+    "_id": "seed_2",
+    "createdAt": "2026-07-24T15:26:12.674Z",
+    "userId": "guest_user_1",
+    "date": "2026-07-24",
+    "mealType": "Lunch",
+    "foodName": "Grilled Chicken Breast with Brown Rice & Broccoli",
+    "servingSize": "200g chicken, 150g rice",
+    "calories": 580,
+    "proteinGrams": 48,
+    "carbsGrams": 62,
+    "fatGrams": 10
+  },
+  {
+    "_id": "id_1784999217874_1kfb0",
+    "createdAt": "2026-07-25T17:06:57.874Z",
+    "userId": "guest_user_1",
+    "date": "2026-07-26",
+    "mealType": "Dinner",
+    "foodName": "CHICKEN ",
+    "servingSize": "1 serving",
+    "calories": 350,
+    "proteinGrams": 25,
+    "carbsGrams": 40,
+    "fatGrams": 10
+  }
+]
