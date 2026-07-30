@@ -278,6 +278,23 @@ export default function App() {
     );
   }
 
+  const handleDeleteAccount = async (userId) => {
+    try {
+      await axios.delete(`${API_BASE}/auth/users/${userId}`);
+      if (user._id === userId) {
+        const remaining = demoAccounts.filter(a => a._id !== userId);
+        if (remaining.length > 0) {
+          handleSelectAccount(remaining[0]);
+        } else {
+          setActiveTab('login');
+        }
+      }
+      fetchInitialData();
+    } catch (e) {
+      console.error('Delete user failed', e);
+    }
+  };
+
   return (
     <div className="app-container">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={() => setActiveTab('login')} />
@@ -362,6 +379,7 @@ export default function App() {
           demoAccounts={demoAccounts}
           onSelectAccount={handleSelectAccount}
           onOpenAuth={() => setShowAuthModal(true)}
+          onDeleteAccount={handleDeleteAccount}
         />
       )}
 

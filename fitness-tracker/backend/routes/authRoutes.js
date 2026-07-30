@@ -226,4 +226,25 @@ router.put('/profile', authMiddleware, async (req, res) => {
   }
 });
 
+// DELETE /api/auth/users/:id - Delete user account & clean up associated logs
+router.delete('/users/:id', async (req, res) => {
+  const userId = req.params.id;
+  try {
+    if (getIsMongoConnected()) {
+      await User.findByIdAndDelete(userId);
+      const Workout = require('../models/Workout');
+      const FoodLog = require('../models/FoodLog');
+      await Workout.deleteMany({ userId });
+      await FoodLog.deleteMany({ userId });
+    } else {
+      stores.users.deleteOne({ _id: userId });
+      stores.workouts.deleteMany({ userId });
+      stores.foodLogs.deleteMany({ userId });
+    }
+    return res.json({ message: 'User account deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

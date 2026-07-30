@@ -1,7 +1,16 @@
 import React from 'react';
-import { Users, Check, Plus, X } from 'lucide-react';
+import { Users, Check, Plus, X, Trash2 } from 'lucide-react';
 
-export default function AccountSwitcherModal({ onClose, currentUser, demoAccounts, onSelectAccount, onOpenAuth }) {
+export default function AccountSwitcherModal({
+  onClose, currentUser, demoAccounts, onSelectAccount, onOpenAuth, onDeleteAccount
+}) {
+  const handleDelete = (e, acc) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete user account "${acc.name}"? This action cannot be undone.`)) {
+      onDeleteAccount(acc._id);
+    }
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content" style={{ position: 'relative', maxWidth: '480px' }}>
@@ -76,15 +85,37 @@ export default function AccountSwitcherModal({ onClose, currentUser, demoAccount
                   </div>
                 </div>
 
-                {isActive ? (
-                  <span className="badge badge-emerald">
-                    <Check size={12} /> Active
-                  </span>
-                ) : (
-                  <span style={{ fontSize: '0.78rem', color: '#06b6d4', fontWeight: '600' }}>
-                    Switch
-                  </span>
-                )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  {isActive ? (
+                    <span className="badge badge-emerald">
+                      <Check size={12} /> Active
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: '0.78rem', color: '#06b6d4', fontWeight: '600' }}>
+                      Switch
+                    </span>
+                  )}
+
+                  {/* Delete Account Button */}
+                  <button
+                    onClick={(e) => handleDelete(e, acc)}
+                    style={{
+                      background: 'rgba(244, 63, 94, 0.12)',
+                      border: '1px solid rgba(244, 63, 94, 0.3)',
+                      color: '#fb7185',
+                      borderRadius: '8px',
+                      padding: '6px 8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease'
+                    }}
+                    title={`Delete user account "${acc.name}"`}
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
               </div>
             );
           })}
