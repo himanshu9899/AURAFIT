@@ -87,47 +87,11 @@ export default function App() {
     monthlyCalories: 10000
   });
 
-  const [workouts, setWorkouts] = useState([
-    {
-      _id: 'w1',
-      userId: 'guest_user_1',
-      title: 'Morning Outdoor Tempo Run',
-      workoutType: 'Running',
-      category: 'Cardio',
-      date: new Date().toISOString().split('T')[0],
-      startTime: '06:30',
-      endTime: '07:15',
-      durationHours: 0,
-      durationMinutes: 45,
-      distanceKm: 7.2,
-      caloriesBurned: 520,
-      intensity: 'High',
-      notes: 'Maintained 6:15 min/km pace across park trails.'
-    },
-    {
-      _id: 'w2',
-      userId: 'guest_user_1',
-      title: 'Hypertrophy Bench Press & Triceps',
-      workoutType: 'Gym',
-      category: 'Chest',
-      date: new Date().toISOString().split('T')[0],
-      startTime: '17:30',
-      endTime: '18:25',
-      durationHours: 0,
-      durationMinutes: 55,
-      distanceKm: 0,
-      caloriesBurned: 420,
-      intensity: 'High',
-      notes: 'Hit a new PR on Incline Bench Press! 85kg for 6 reps.'
-    }
-  ]);
+  const [workouts, setWorkouts] = useState([]);
 
   const [foodData, setFoodData] = useState({
-    totals: { calories: 1230, proteinGrams: 98, carbsGrams: 95, fatGrams: 27 },
-    logs: [
-      { _id: 'f1', mealType: 'Breakfast', foodName: 'Oatmeal with Blueberries & Whey Protein', calories: 420, proteinGrams: 32, carbsGrams: 55, fatGrams: 8 },
-      { _id: 'f2', mealType: 'Lunch', foodName: 'Grilled Chicken Breast & Rice', calories: 580, proteinGrams: 48, carbsGrams: 25, fatGrams: 10 }
-    ]
+    totals: { calories: 0, proteinGrams: 0, carbsGrams: 0, fatGrams: 0 },
+    logs: []
   });
 
   const [analytics, setAnalytics] = useState(null);
@@ -154,7 +118,7 @@ export default function App() {
       ]);
 
       if (userRes.data) setUser(userRes.data);
-      if (workoutsRes.data && workoutsRes.data.length > 0) setWorkouts(workoutsRes.data);
+      if (Array.isArray(workoutsRes.data)) setWorkouts(workoutsRes.data);
       if (dietRes.data) setFoodData(dietRes.data);
       if (analyticsRes.data) setAnalytics(analyticsRes.data);
       if (plansRes.data) setDietPlans(plansRes.data);
@@ -369,7 +333,7 @@ export default function App() {
           )}
 
           {activeTab === 'analytics' && (
-            <AnalyticsView analytics={analytics} user={user} />
+            <AnalyticsView analytics={analytics} user={user} workouts={workouts} foodData={foodData} />
           )}
 
           {activeTab === 'profile' && (

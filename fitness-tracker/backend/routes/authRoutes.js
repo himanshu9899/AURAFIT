@@ -11,6 +11,7 @@ const DEMO_USERS = [
     _id: 'guest_user_1',
     name: 'Alex Johnson',
     email: 'alex.fitness@example.com',
+    password: 'password123',
     age: 28,
     gender: 'male',
     heightCm: 178,
@@ -29,6 +30,7 @@ const DEMO_USERS = [
     _id: 'guest_user_2',
     name: 'Sarah Miller',
     email: 'sarah.marathon@example.com',
+    password: 'password123',
     age: 26,
     gender: 'female',
     heightCm: 165,
@@ -47,6 +49,7 @@ const DEMO_USERS = [
     _id: 'guest_user_3',
     name: 'Marcus Vance',
     email: 'marcus.power@example.com',
+    password: 'password123',
     age: 31,
     gender: 'male',
     heightCm: 185,
@@ -65,8 +68,25 @@ const DEMO_USERS = [
 
 stores.users.seedIfEmpty(DEMO_USERS);
 
-router.get('/demo-accounts', (req, res) => {
-  res.json(DEMO_USERS);
+router.get('/demo-accounts', async (req, res) => {
+  try {
+    let allUsers = [];
+    if (getIsMongoConnected()) {
+      const dbUsers = await User.find({}).select('-password');
+      allUsers = [...DEMO_USERS, ...dbUsers.filter(u => !DEMO_USERS.some(d => d._id === u._id.toString() || d.email === u.email))];
+    } else {
+      const dbUsers = stores.users.find({}) || [];
+      allUsers = [...DEMO_USERS];
+      dbUsers.forEach(u => {
+        if (!allUsers.some(d => d._id === u._id || d.email === u.email)) {
+          allUsers.push(u);
+        }
+      });
+    }
+    return res.json(allUsers);
+  } catch (err) {
+    return res.json(DEMO_USERS);
+  }
 });
 
 router.post('/switch-account', async (req, res) => {
@@ -79,7 +99,7 @@ router.post('/switch-account', async (req, res) => {
     if (!targetUser) {
       targetUser = DEMO_USERS[0];
     }
-    const token = jwt.sign({ id: targetUser._id, email: targetUser.email, name: targetUser.name }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: targetUser._id, email: targetUser.email, name: targetUser.name, isGuest: targetUser.isGuest }, JWT_SECRET, { expiresIn: '7d' });
     return res.json({ token, user: targetUser });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -95,7 +115,7 @@ router.post('/register', async (req, res) => {
   try {
     if (getIsMongoConnected()) {
       const existingUser = await User.findOne({ email });
-      if (existingUser) return res.status(400).json({ message: 'User already exists' });
+      if (existingUser) return res.status(400).json({ message: 'User already exists with this email' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await User.create({
@@ -106,14 +126,15 @@ router.post('/register', async (req, res) => {
         gender: gender || 'male',
         heightCm: heightCm || 175,
         weightKg: weightKg || 70,
-        fitnessGoal: fitnessGoal || 'Weight Loss'
+        fitnessGoal: fitnessGoal || 'Weight Loss',
+        isGuest: false
       });
 
-      const token = jwt.sign({ id: newUser._id, email: newUser.email, name: newUser.name }, JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign({ id: newUser._id, email: newUser.email, name: newUser.name, isGuest: false }, JWT_SECRET, { expiresIn: '7d' });
       return res.json({ token, user: newUser });
     } else {
       const existing = stores.users.findOne({ email });
-      if (existing) return res.status(400).json({ message: 'User already exists' });
+      if (existing) return res.status(400).json({ message: 'User already exists with this email' });
 
       const newUser = stores.users.insertOne({
         name,
@@ -132,7 +153,7 @@ router.post('/register', async (req, res) => {
         isGuest: false
       });
 
-      const token = jwt.sign({ id: newUser._id, email: newUser.email, name: newUser.name }, JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign({ id: newUser._id, email: newUser.email, name: newUser.name, isGuest: false }, JWT_SECRET, { expiresIn: '7d' });
       return res.json({ token, user: newUser });
     }
   } catch (err) {
@@ -149,21 +170,25 @@ router.post('/login', async (req, res) => {
   try {
     if (getIsMongoConnected()) {
       const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+      if (!user) return res.status(400).json({ message: 'Account not found. Please create a new account!' });
 
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+      if (!isMatch) return res.status(400).json({ message: 'Incorrect password' });
 
-      const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign({ id: user._id, email: user.email, name: user.name, isGuest: user.isGuest }, JWT_SECRET, { expiresIn: '7d' });
       return res.json({ token, user });
     } else {
       let user = stores.users.findOne({ email });
       if (!user) {
         user = DEMO_USERS.find(u => u.email === email);
       }
-      if (!user) return res.status(400).json({ message: 'Invalid credentials. Try selecting a preset account!' });
+      if (!user) return res.status(400).json({ message: 'Account not found. Please create a new account!' });
 
-      const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+      if (user.password && user.password !== password) {
+        return res.status(400).json({ message: 'Incorrect password' });
+      }
+
+      const token = jwt.sign({ id: user._id, email: user.email, name: user.name, isGuest: user.isGuest }, JWT_SECRET, { expiresIn: '7d' });
       return res.json({ token, user });
     }
   } catch (err) {

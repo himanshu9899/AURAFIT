@@ -74,7 +74,6 @@ export default function Dashboard({
   const remainingCal = Math.max(0, dailyTargetCal - consumed + dailyStats.caloriesBurned);
   const percentageCal = Math.min(100, Math.round((consumed / dailyTargetCal) * 100));
 
-  // Chart Data Arrays
   const chartDays = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(Date.now() - i * 86400000);
@@ -86,8 +85,8 @@ export default function Dashboard({
     chartDays.push({
       date: dateStr,
       day: dayName,
-      duration: mins > 0 ? mins : (i === 0 ? dailyStats.durationMinutes : Math.floor(35 + Math.random() * 40)),
-      calories: cals > 0 ? cals : Math.floor(280 + Math.random() * 250),
+      duration: mins,
+      calories: cals,
       goalTarget: goals?.dailyMinutes || 60
     });
   }
@@ -96,15 +95,6 @@ export default function Dashboard({
     name: type,
     value: typeCounts[type]
   }));
-  if (distributionData.length === 0) {
-    distributionData.push(
-      { name: 'Running', value: 5 },
-      { name: 'Gym', value: 7 },
-      { name: 'Cycling', value: 4 },
-      { name: 'Swimming', value: 2 },
-      { name: 'Yoga', value: 3 }
-    );
-  }
   const COLORS = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b', '#f43f5e', '#34d399'];
 
   return (
@@ -331,48 +321,58 @@ export default function Dashboard({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {workouts.slice(0, 4).map((w, idx) => (
-              <div key={w._id || idx} style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 18px',
-                borderRadius: '12px',
-                background: 'rgba(255,255,255,0.02)',
-                border: '1px solid rgba(255,255,255,0.05)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '10px',
-                    background: 'rgba(16, 185, 129, 0.15)',
-                    color: '#10b981',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <Dumbbell size={20} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: '0.95rem', fontWeight: '700' }}>{w.title}</h4>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                      {w.workoutType || w.category} • {w.date} ({w.startTime || '08:00'} - {w.endTime || '08:45'})
-                    </span>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#34d399' }}>{w.caloriesBurned} kcal</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
-                      {w.durationMinutes} mins {w.distanceKm > 0 ? `• ${w.distanceKm} km` : ''}
+            {workouts.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '36px 16px', color: 'var(--text-muted)' }}>
+                <Dumbbell size={32} color="#6b7280" style={{ marginBottom: '8px' }} />
+                <p style={{ fontSize: '0.95rem', fontWeight: '600', color: '#e5e7eb' }}>No workout activities logged yet</p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', marginTop: '4px' }}>
+                  Click '+ Log Workout' above to record your first workout session!
+                </p>
+              </div>
+            ) : (
+              workouts.slice(0, 4).map((w, idx) => (
+                <div key={w._id || idx} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.02)',
+                  border: '1px solid rgba(255,255,255,0.05)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '10px',
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      color: '#10b981',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <Dumbbell size={20} />
+                    </div>
+                    <div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: '700' }}>{w.title}</h4>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        {w.workoutType || w.category} • {w.date} ({w.startTime || '08:00'} - {w.endTime || '08:45'})
+                      </span>
                     </div>
                   </div>
-                  <span className="badge badge-emerald">{w.intensity || 'Moderate'}</span>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#34d399' }}>{w.caloriesBurned} kcal</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+                        {w.durationMinutes} mins {w.distanceKm > 0 ? `• ${w.distanceKm} km` : ''}
+                      </div>
+                    </div>
+                    <span className="badge badge-emerald">{w.intensity || 'Moderate'}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
